@@ -4,7 +4,7 @@ A full-stack vendor dashboard for restaurant product management.
 
 ## 🔗 Live Demo
 
-👉 [View Deployed App](https://your-vercel-app-url.vercel.app)
+👉 [View Deployed App](https://yam-cart-backend-dashboard.vercel.app/)
 
 ## 🚀 Features
 
