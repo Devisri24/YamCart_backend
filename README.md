@@ -1,3 +1,36 @@
+# 🍽️ YamCart Vendor Dashboard
+
+A full-stack vendor dashboard for restaurant product management.
+
+## 🔗 Live Demo
+
+👉 [View Deployed App](https://your-vercel-app-url.vercel.app)
+
+## 🚀 Features
+
+- Vendor registration and login (JWT-based)
+- Add firm with image, category, and region
+- Add/delete products with image
+- Secure token-based authentication
+- MongoDB integration via Mongoose
+
+## 🛠️ Tech Stack
+
+- **Frontend**: React (Vite), React Router v7
+- **Backend**: Express.js + MongoDB + JWT
+- **Deployment**: Frontend on Vercel | Backend on Render
+
+## 🔧 Local Setup
+
+```bash
+git clone https://github.com/your-username/your-repo-name.git
+cd your-repo-name
+npm install
+npm run dev
+
+
+
+
 # React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
