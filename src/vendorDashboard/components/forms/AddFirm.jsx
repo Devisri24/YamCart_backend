@@ -4,103 +4,100 @@ import { API_URL } from '../../data/apiPath';
 import { ThreeCircles } from 'react-loader-spinner';
 
 
-const AddFirm = () => {
-  const [firmName, setFirmName] = useState("");
-  const [area, setArea] = useState("");
-  const [category, setCategory] = useState([]);
-  const [region, setRegion] = useState([]);
-  const [offer, setOffer] = useState("");
-  const [file, setFile] = useState(null);
-  const [loading, setLoading] = useState(false); 
+const AddFirm=()=>
+    {
+      const [loading, setLoading] = useState(false);
+         const [firmName,setFirmName]=useState("");
+         const [area,setArea]=useState("");
+         const [category,setCategory]=useState([]);
+         const [region,setRegion]=useState([]);
+         const[offer,setOffer]=useState("");
+         const[file,setFile]=useState(null);
+         const handleImageUpload=(event)=>
+         {
+              const selectedImage=event.target.files[0];
+              setFile(selectedImage);
+         }
+         const handleCategoryChange=(event)=>
+         {
+             const value=event.target.value;
+             if(category.includes(value))
+             {
+                setCategory(category.filter((item)=>item!=value));
+             }
+             else
+             {
+                setCategory([...category,value])
+             }
+         }
+         const handleRegionChange=(event)=>
+            {
+                const value=event.target.value;
+                if(region.includes(value))
+                {
+                   setRegion(region.filter((item)=>item!=value));
+                }
+                else
+                {
+                   setRegion([...region,value])
+                }
+            }
+         const handleFirmSubmit = async (e) => {
+          e.preventDefault();
+          setLoading(true);
+  try {
+    const loginToken = localStorage.getItem('loginToken');
+    if (!loginToken) {
+      console.log("user not authenticated");
+      alert("You must be logged in to add a firm.");
+      return;
+    }
 
+    const formData = new FormData();
+    formData.append('firmName', firmName);
+    formData.append('area', area);
+    formData.append('offer', offer);
+    category.forEach((value) => formData.append('category', value));
+    region.forEach((value) => formData.append('region', value));
+    formData.append('image', file);
 
-  const handleCategoryChange = (event)=>{
-      const value = event.target.value;
-        if(category.includes(value)){
-          setCategory(category.filter((item)=> item !== value));
-        }else{
-          setCategory([...category, value])
-        }
-  }
-  const handleRegionChange = (event)=>{
-      const value = event.target.value;
-        if(region.includes(value)){
-          setRegion(region.filter((item)=> item !== value));
-        }else{
-          setRegion([...region, value])
-        }
-  }
- 
-  const handleImageUpload =(event)=>{
-      const selectedImage = event.target.files[0];
-      setFile(selectedImage)
-  }
+    const response = await fetch(`${API_URL}/firm/add-firm`, {
+      method: 'POST',
+      headers: {
+        'token': `${loginToken}`,
+      },
+      body: formData,
+    });
 
-  const handleFirmSubmit= async(e)=>{
-        e.preventDefault();
-    setLoading(true); 
-
-   try {
-        const loginToken = localStorage.getItem('loginToken');
-        if(!loginToken){
-            console.error("User not authenticated");
-        }
-
-        const formData = new FormData();
-          formData.append('firmName', firmName);
-          formData.append('area', area);
-          formData.append('offer', offer);
-          formData.append('image', file)
-
-          category.forEach((value)=>{
-            formData.append('category', value)
-          });
-          region.forEach((value)=>{
-            formData.append('region', value)
-          })
-
-          const response = await fetch(`${API_URL}/firm/add-firm`,{
-            method:'POST',
-            headers:{
-              'token': `${loginToken}`
-            },
-            body: formData
-          });
-          const data = await response.json()
-          if(response.ok){
-            console.log(data);
-            setFirmName("");
-            setArea("")
-            setCategory([]);
-            setRegion([]);
-            setOffer("");
-            setFile(null)
-            alert("Firm added Successfully")
-          }else if(data.message === "vendor can have only one firm"){
-              alert("Firm Exists 🥗. Only 1 firm can be added  ")
-          } else{
-              alert('Failed to add Firm')
-          }
-
-               const mango = data.firmId;
-          const vendorRestuarant = data.vendorFirmName
-
-          localStorage.setItem('firmId', mango);
-          localStorage.setItem('firmName', vendorRestuarant)
-          window.location.reload()
-
-   } catch (error) {
-      console.error("failed to add Firm")
-      alert("failed to add Firm")
-   } finally {
-    setLoading(false); 
-  }  
-  }
-
+    const data = await response.json();
+    console.log("Backend response:", data);
+    if (response.ok) {
+      console.log(data);
+      setFirmName("");
+      setArea("");
+      setCategory([]);
+      setRegion([]);
+      setOffer("");
+      setFile(null);
+      alert("Firm added successfully");
+    } else if (data.message === "vendor can have only one firm") {
+      alert("Firm exists. Only one firm can be added.");
+    } else {
+      alert("Failed to add firm.");
+    }
+ const mango=data.firmId;
+  localStorage.setItem('firmId',mango)    
+  const vendorRestuarant = data.vendorFirmName
+    localStorage.setItem('firmName', vendorRestuarant)
+  } catch (error) {
+    console.error("Failed to add firm", error);
+    alert("Failed to add firm.");
+  } 
+};
 
   return (
         <div className="firmSection">
-   {loading &&        <div className="loaderSection">
+   {loading && <div className="loaderSection">
         <ThreeCircles
           visible={loading}
           height={100}

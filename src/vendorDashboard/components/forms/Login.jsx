@@ -3,7 +3,7 @@ import { API_URL } from '../../data/apiPath';
 import { ThreeCircles } from 'react-loader-spinner';
 
 
-const Login = ({showWelcomeHandler}) => {
+const Login = ({showWelcomeHandler,onLoginSuccess}) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false); 
@@ -31,6 +31,7 @@ const Login = ({showWelcomeHandler}) => {
             setEmail("");
             setPassword("");
             localStorage.setItem('loginToken', data.token);
+            onLoginSuccess()
             showWelcomeHandler()
 
           }
@@ -55,7 +56,7 @@ const Login = ({showWelcomeHandler}) => {
 
   return (
     <div className="loginSection">
-{loading &&        <div className="loaderSection">
+{loading && <div className="loaderSection">
         <ThreeCircles
           visible={loading}
           height={100}

@@ -1,4 +1,5 @@
 import React ,{useState,useEffect} from 'react'
+import { useNavigate } from "react-router-dom";
 import NavBar from '../components/NavBar'
 import SideBar from '../components/SideBar'
 import Register from '../components/forms/Register'
@@ -23,7 +24,6 @@ const LandingPage = () => {
     const loginToken = localStorage.getItem('loginToken');
     if(loginToken){
         setShowLogOut(true)
-        setShowWelcome(true)
     }
   }, [])
 
@@ -37,13 +37,12 @@ const LandingPage = () => {
   },[])
 
      const logOutHandler =()=>{
-    confirm("Are you sure to logout?")
       localStorage.removeItem("loginToken");
       localStorage.removeItem("firmId");
       localStorage.removeItem('firmName');
+      confirm("Are you sure want to logout?")
       setShowLogOut(false)
       setShowFirmTitle(true)
-      setShowWelcome(false)
   }
 
 const showLoginHandler =()=>{
@@ -51,7 +50,6 @@ const showLoginHandler =()=>{
     setShowRegister(false)
     setShowFirm(false)
     setShowProduct(false)
-    setShowWelcome(false)
     setShowAllProducts(false)
 
 }
@@ -89,7 +87,12 @@ const showProductHandler = ()=>{
     setShowAllProducts(false)
     }else{
         alert("please login")
-        setShowLogin(true)
+        setShowRegister(false)
+    setShowLogin(true)
+    setShowFirm(false)
+    setShowProduct(false)
+    setShowWelcome(false)
+    setShowAllProducts(false)
     }
 
 }
@@ -131,7 +134,7 @@ const showAllProductsHandler = ()=>{
           {showProduct && showLogOut && <AddProduct />}
           {showWelcome && <Welcome />}
           {showAllProducts && showLogOut && <AllProduct />}
-          {showLogin && <Login showWelcomeHandler ={showWelcomeHandler}/>}
+          {showLogin && <Login showWelcomeHandler={showWelcomeHandler} onLoginSuccess={() => setShowLogOut(true)} />}
           {showRegister && <Register showLoginHandler = {showLoginHandler}/>}
         </div>
         

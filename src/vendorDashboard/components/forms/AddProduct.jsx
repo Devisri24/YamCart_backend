@@ -31,55 +31,56 @@ const AddProduct = () => {
     setImage(selectedImage)
 }
 
-  const handleAddProduct = async(e)=>{
-      e.preventDefault()
-    setLoading(true); 
-
-      try {
-        const loginToken = localStorage.getItem('loginToken');
-          const firmId = localStorage.getItem('firmId')
-
-          if(!loginToken || !firmId){
-              console.error("user not authenticated")
-          }
-          
-        const formData = new FormData();
-        formData.append('productName', productName);
-        formData.append('price', price);
-        formData.append('description', description);
-        formData.append('bestSeller', bestSeller)
-        formData.append('image', image)
-
-        category.forEach((value)=>{
-          formData.append('category', value)
-        });
-   
-          const response = await fetch(`${API_URL}/product/add-product/${firmId}`, {
-            method:'POST',
-            body: formData
-          })
-            const data = await response.json()
-
-            if(response.ok){
-              alert('Product added succesfully')
+ const handleAddProduct=async(e)=>
+        {
+            e.preventDefault();
+            try
+            {
+                const loginToken=localStorage.getItem('loginToken');
+                const firmId=localStorage.getItem('firmId');
+                if(!loginToken || !firmId)
+                {
+                    console.log("user not authenticated");
+                }
+                const formData=new FormData();
+                  formData.append('productName',productName);
+                  formData.append('price',price);
+                  category.forEach((value)=>{
+                  formData.append('category',value)
+                  })
+                  formData.append('image',image);
+                  formData.append('description',description);
+                  formData.append('bestseller',bestSeller);
+                  console.log("🔥 firmId value before fetch:", firmId);
+                  const response=await fetch(`${API_URL}/product/add-product/${firmId}`,
+                  {
+                      method:'POST',
+                      body:formData
+                  }
+                  );
+                const data= await response.json();
+                if(response.ok)
+                {
+                    console.log(data);
+                    alert('product added successfully');
+                    setProductName("");
+                        setPrice("");
+                        setCategory([]);
+                        setBestSeller(false);
+                        setDescription("")
+                        setImage(null)
+                }
             }
-            setProductName("")
-            setPrice("");
-            setCategory([])
-            setBestSeller(false);
-            setImage(null);
-            setDescription("")
-
-      } catch (error) {
-          alert('Failed to add Product')
-      }finally {
-        setLoading(false); 
-      }
-  }
+            catch(error)
+            {
+                console.error(error);
+                  alert("product add failed");
+            }
+        }
 
     return (
     <div className="firmSection">
-{loading &&         <div className="loaderSection">
+{loading && <div className="loaderSection">
         <ThreeCircles
           visible={loading}
           height={100}
